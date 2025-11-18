@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduCred — Certificate Verification</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- IMPORTANT: correct path to your CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="#0f172a"/>
+          <path d="M7 12l3 3 7-7" stroke="#E2E8F0" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+
+        <div class="brand-text">
+          <h1>EduCred</h1>
+          <p class="muted">Certificate verification</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-link active" href="#">Home</a>
+        <a class="nav-link" href="#features">Features</a>
+        <a class="nav-link" href="#verify">Verify</a>
+        <a class="btn secondary" href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-left">
+        <p class="eyebrow">Fast · Secure · Clear</p>
+
+        <h2>Instant Certificate Verification With Trust Scoring</h2>
+        <p class="lead">
+          Upload a PDF or image and get structured extraction, confidence scores, and verification results.
+        </p>
+
+        <div class="hero-actions">
+          <label class="btn primary" for="file">Upload File</label>
+          <a class="btn ghost" href="#features">Learn More</a>
+        </div>
+
+        <div class="kpis">
+          <div><strong>0.8s</strong><span>Response</span></div>
+          <div><strong>99%</strong><span>Accuracy</span></div>
+          <div><strong>Multi</strong><span>Formats</span></div>
+        </div>
+      </div>
+
+      <div class="hero-right" aria-hidden="true">
+        <div class="mock">
+          <div class="mock-header">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="mock-title">example certificate.pdf</div>
+          </div>
+
+          <div class="mock-body">
+            <div class="row"><span class="label">Name</span><span class="value">Apex Achievers</span></div>
+            <div class="row"><span class="label">Course</span><span class="value">Full Stack Bootcamp</span></div>
+            <div class="row"><span class="label">Issued</span><span class="value">Jul 10, 2025</span></div>
+            <div class="score">Trust Score <strong>92</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="panel">
+      <h3>Features</h3>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div style="font-size:20px">🔎</div>
+          <h4>Field Extraction</h4>
+          <p>Structured parsing with JSON output and confidence scores.</p>
+        </div>
+
+        <div class="feature-card">
+          <div style="font-size:20px">⚡</div>
+          <h4>Fast Interface</h4>
+          <p>Clean and responsive UI.</p>
+        </div>
+
+        <div class="feature-card">
+          <div style="font-size:20px">🔒</div>
+          <h4>Secure Upload</h4>
+          <p>Files sent only to our server — nothing external(no thrid party).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VERIFY -->
+    <section id="verify" class="panel">
+      <h3>Verify Certificate</h3>
+      <p class="muted">Upload a PDF or image. It will be sent to your backend endpoint if available.</p>
+
+      <div class="upload-area">
+        <input id="file" type="file" accept="application/pdf,image/*" />
+        <div id="uploadHint" class="upload-hint">No file selected</div>
+
+        <div class="actions">
+          <button id="sendBtn" class="btn primary" disabled>Send to Server</button>
+          <button id="clearBtn" class="btn ghost">Clear</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" aria-live="polite"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="panel">
+      <h3>Contact</h3>
+
+      <div class="contact">
+        <div>
+          <div style="font-weight:700">Project Contact</div>
+          <div class="muted" style="margin-top:6px">For integration or queries:</div>
+          <div style="margin-top:8px">
+            <a class="contact-link" href="mailto:chaitanyareddypappu299@gmail.com">Team Apex Achievers</a>
+          </div>
+        </div>
+
+        <div style="text-align:right;color:var(--muted)">
+          <div>EduCred</div>
+          <div style="font-size:12px;margin-top:6px">Certificate Verification</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div>© <span id="yr"></span> EduCred</div>
+      <div class="muted">Secure file handling · Easy API integration</div>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT: safe upload to /api/verify (matches your backend) -->
+  <script>
+    const fileInput = document.getElementById('file');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const uploadHint = document.getElementById('uploadHint');
+    const result = document.getElementById('result');
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    fileInput.addEventListener('change', () => {
+      if (!fileInput.files.length) {
+        uploadHint.textContent = 'No file selected';
+        sendBtn.disabled = true;
+        return;
+      }
+      uploadHint.textContent = fileInput.files[0].name + ' (' + Math.round(fileInput.files[0].size/1024) + ' KB)';
+      sendBtn.disabled = false;
+    });
+
+    clearBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      uploadHint.textContent = 'No file selected';
+      sendBtn.disabled = true;
+      result.textContent = '';
+    });
+
+    function escapeHtml(s){
+      return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    sendBtn.addEventListener('click', async () => {
+      if (!fileInput.files.length) return;
+      sendBtn.disabled = true;
+      result.textContent = 'Uploading...';
+
+      const form = new FormData();
+      form.append('file', fileInput.files[0]); // matches app.py
+
+      try {
+        const resp = await fetch('/api/verify', { method: 'POST', body: form });
+        const status = resp.status;
+        const ct = resp.headers.get('content-type') || '';
+
+        if (!resp.ok) {
+          const txt = await resp.text();
+          result.innerHTML = `<div class="err">Server returned ${status}</div>
+                              <pre class="err-txt">${escapeHtml(txt)}</pre>`;
+          console.warn('Server error', status, ct, txt);
+        } else if (ct.includes('application/json')) {
+          const data = await resp.json();
+
+          // pick a color for the trust score
+          const trustColor =
+            data.trust_score >= 75 ? "#4ade80" :
+            data.trust_score >= 40 ? "#facc15" :
+            "#f87171";
+
+          // render friendly UI
+          result.innerHTML = `
+            <div class="pretty-box">
+
+              <div class="score-box" style="border-left: 6px solid ${trustColor}">
+                <div class="score-label">Trust Score</div>
+                <div class="score-value" style="color:${trustColor}">${data.trust_score}</div>
+              </div>
+
+              <div class="info-grid">
+
+                <div class="info-item">
+                  <div class="info-label">File Name</div>
+                  <div class="info-value">${escapeHtml(data.file_name || '')}</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">OCR Confidence</div>
+                  <div class="info-value">${data.avg_ocr_confidence ? (data.avg_ocr_confidence * 100).toFixed(1) + '%' : '—'}</div>
+                </div>
+
+                <div class="info-item" style="grid-column: span 2;">
+                  <div class="info-label">Detected Text Snippet</div>
+                  <div class="info-value">${escapeHtml(data.extracted_text_snippet || data.full_text?.slice(0,250) || '')}</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Has Dates</div>
+                  <div class="info-value">${data.has_dates ? "Yes" : "No"}</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Word Count</div>
+                  <div class="info-value">${data.word_count ?? '—'}</div>
+                </div>
+
+              </div>
+
+              <details class="json-details">
+                <summary>Show Full JSON</summary>
+                <pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>
+              </details>
+
+            </div>
+          `;
+        } else {
+          // server returned HTML or plain text (not JSON)
+          const txt = await resp.text();
+          result.innerHTML = `<div class="warn">Server returned ${status} with content-type ${ct}</div>
+                              <pre class="warn-txt">${escapeHtml(txt)}</pre>`;
+          console.log('Non-JSON response', status, ct, txt);
+        }
+      } catch (err) {
+        result.textContent = 'Network error: ' + err.message;
+        console.error(err);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
